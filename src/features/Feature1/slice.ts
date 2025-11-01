@@ -53,3 +53,5 @@ export const {
   toggleTodo,
   clearTodos,
 } = feature1Slice.actions;
+
+export default feature1Slice.reducer;

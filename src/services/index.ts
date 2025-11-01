@@ -16,6 +16,7 @@ export {
 
 // Storage utilities
 export { storageService as storage } from './storage';
+export { authStorage, AuthStorage } from './Storage/index';
 
 // Types
 export type { ApiResponse, ApiError, RequestConfig } from './HttpClient';

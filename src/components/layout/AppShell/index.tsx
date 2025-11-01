@@ -92,7 +92,7 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
 
             {sidebarContent && isSidebarOpen && (
               <div className={styles.sidebarWrapper}>
-                <Paper p="md" bg="gray.0" withBorder>
+                <Paper p="md" withBorder>
                   {sidebarContent}
                 </Paper>
               </div>

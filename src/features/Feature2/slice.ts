@@ -66,3 +66,5 @@ export const feature2Slice = createSlice({
 });
 
 export const { clearPosts, togglePostBookmark } = feature2Slice.actions;
+
+export default feature2Slice.reducer;

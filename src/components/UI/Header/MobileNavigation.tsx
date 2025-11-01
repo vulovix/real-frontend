@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Anchor, Stack, Text } from '@mantine/core';
+import { selectIsAuthenticated } from '../../../features/Auth/slice';
+import { useAppSelector } from '../../../store/hooks';
 
 interface MobileNavigationProps {
   onLinkClick: () => void;
@@ -8,6 +10,7 @@ interface MobileNavigationProps {
 
 const MobileNavigation: React.FC<MobileNavigationProps> = ({ onLinkClick }) => {
   const location = useLocation();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   return (
     <Stack gap="md" p="md">
@@ -26,49 +29,45 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ onLinkClick }) => {
         Home
       </Anchor>
 
-      <Anchor
-        component={Link}
-        to="/saga"
-        fw={location.pathname === '/saga' ? 700 : 400}
-        c={location.pathname === '/saga' ? 'blue' : 'dark'}
-        underline="never"
-        onClick={onLinkClick}
-      >
-        Saga Feature
-      </Anchor>
+      {/* Dashboard link - only show when authenticated */}
+      {isAuthenticated && (
+        <Anchor
+          component={Link}
+          to="/dashboard"
+          fw={location.pathname === '/dashboard' ? 700 : 400}
+          c={location.pathname === '/dashboard' ? 'blue' : 'dark'}
+          underline="never"
+          onClick={onLinkClick}
+        >
+          Dashboard
+        </Anchor>
+      )}
 
-      <Anchor
-        component={Link}
-        to="/thunk"
-        fw={location.pathname === '/thunk' ? 700 : 400}
-        c={location.pathname === '/thunk' ? 'blue' : 'dark'}
-        underline="never"
-        onClick={onLinkClick}
-      >
-        Thunk Feature
-      </Anchor>
-
-      <Anchor
-        component={Link}
-        to="/no-sidebar"
-        fw={location.pathname === '/no-sidebar' ? 700 : 400}
-        c={location.pathname === '/no-sidebar' ? 'blue' : 'dark'}
-        underline="never"
-        onClick={onLinkClick}
-      >
-        No Sidebar
-      </Anchor>
-
-      <Anchor
-        component={Link}
-        to="/settings"
-        fw={location.pathname === '/settings' ? 700 : 400}
-        c={location.pathname === '/settings' ? 'blue' : 'dark'}
-        underline="never"
-        onClick={onLinkClick}
-      >
-        Settings
-      </Anchor>
+      {/* Auth links - show when not authenticated */}
+      {!isAuthenticated && (
+        <>
+          <Anchor
+            component={Link}
+            to="/login"
+            fw={location.pathname === '/login' ? 700 : 400}
+            c={location.pathname === '/login' ? 'blue' : 'dark'}
+            underline="never"
+            onClick={onLinkClick}
+          >
+            Login
+          </Anchor>
+          <Anchor
+            component={Link}
+            to="/signup"
+            fw={location.pathname === '/signup' ? 700 : 400}
+            c={location.pathname === '/signup' ? 'blue' : 'dark'}
+            underline="never"
+            onClick={onLinkClick}
+          >
+            Sign Up
+          </Anchor>
+        </>
+      )}
     </Stack>
   );
 };
