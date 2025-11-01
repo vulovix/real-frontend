@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Badge, Card, Loader, Stack, Text } from '@mantine/core';
-import { Feature2State } from '../../features/feature-2/slice';
-import { RootState } from '../../store';
+import { Feature2State } from '../../../features/Feature2/slice';
+import { RootState } from '../../../store';
 
 const ThunkSidebar: React.FC = () => {
   const { data, loading, error } = useSelector(

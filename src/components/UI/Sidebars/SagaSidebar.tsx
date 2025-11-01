@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Badge, Card, Loader, Stack, Text } from '@mantine/core';
-import { Feature1State } from '../../features/feature-1/slice';
-import { RootState } from '../../store';
+import { Feature1State } from '../../../features/Feature1/slice';
+import { RootState } from '../../../store';
 
 const SagaSidebar: React.FC = () => {
   const { data, loading, error } = useSelector(

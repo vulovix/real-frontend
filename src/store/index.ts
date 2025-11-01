@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
-import { feature1Slice, Feature1State } from '../features/feature-1/slice';
-import { feature2Slice, Feature2State } from '../features/feature-2/slice';
+import { feature1Slice, Feature1State } from '../features/Feature1/slice';
+import { feature2Slice, Feature2State } from '../features/Feature2/slice';
 import { rootSaga } from './rootSaga';
 
 const sagaMiddleware = createSagaMiddleware();

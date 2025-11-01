@@ -1,7 +1,10 @@
 import React from 'react';
 import RouteLayout from '../../components/Layout/RouteLayout';
 import { SagaSidebar } from '../../components/UI/Sidebars';
-import Feature1Page from '../../features/feature-1';
+import { Button, Container, Group, Paper, Text, Title } from '@mantine/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
+import Feature1Page from '../../features/Feature1';
 
 const SagaRoute: React.FC = () => {
   return (
