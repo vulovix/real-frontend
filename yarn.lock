@@ -1158,7 +1158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:8.3.6":
+"@mantine/hooks@npm:^8.3.6":
   version: 8.3.6
   resolution: "@mantine/hooks@npm:8.3.6"
   peerDependencies:
@@ -5883,7 +5883,7 @@ __metadata:
     "@eslint/js": "npm:^9.37.0"
     "@ianvs/prettier-plugin-sort-imports": "npm:^4.7.0"
     "@mantine/core": "npm:8.3.6"
-    "@mantine/hooks": "npm:8.3.6"
+    "@mantine/hooks": "npm:^8.3.6"
     "@reduxjs/toolkit": "npm:^2.9.2"
     "@storybook/addon-themes": "npm:^9.1.10"
     "@storybook/react": "npm:^9.1.10"

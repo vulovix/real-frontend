@@ -3,7 +3,13 @@ import { Route, Routes } from 'react-router-dom';
 import HomePage from '../components/HomePage';
 import RouteLayout from '../components/layout/RouteLayout';
 import NoSidebarPage from '../components/NoSidebarPage';
-import { AppOverviewSidebar, SagaSidebar, ThunkSidebar } from '../components/sidebars';
+import SettingsPage from '../components/SettingsPage';
+import {
+  AppOverviewSidebar,
+  SagaSidebar,
+  SettingsSidebar,
+  ThunkSidebar,
+} from '../components/sidebars';
 import Feature1Page from '../features/feature-1';
 import Feature2Page from '../features/feature-2';
 
@@ -53,6 +59,14 @@ const AppRoutes: React.FC = () => {
         element={
           <RouteLayout pageName="No Sidebar Example">
             <NoSidebarPage />
+          </RouteLayout>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <RouteLayout pageName="Settings" sidebarContent={<SettingsSidebar />}>
+            <SettingsPage />
           </RouteLayout>
         }
       />

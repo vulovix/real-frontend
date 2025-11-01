@@ -66,6 +66,15 @@ const Header: React.FC<HeaderProps> = ({ opened, toggle }) => {
           >
             No Sidebar
           </Anchor>
+          <Anchor
+            component={Link}
+            to="/settings"
+            fw={location.pathname === '/settings' ? 700 : 400}
+            c={location.pathname === '/settings' ? 'blue' : 'dark'}
+            underline="never"
+          >
+            Settings
+          </Anchor>
         </Group>
       </Group>
     </Container>

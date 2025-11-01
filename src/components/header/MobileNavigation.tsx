@@ -58,6 +58,17 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ onLinkClick }) => {
       >
         No Sidebar
       </Anchor>
+
+      <Anchor
+        component={Link}
+        to="/settings"
+        fw={location.pathname === '/settings' ? 700 : 400}
+        c={location.pathname === '/settings' ? 'blue' : 'dark'}
+        underline="never"
+        onClick={onLinkClick}
+      >
+        Settings
+      </Anchor>
     </Stack>
   );
 };
