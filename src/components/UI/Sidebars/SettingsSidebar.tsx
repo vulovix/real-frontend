@@ -1,6 +1,6 @@
 import React from 'react';
 import { Badge, Card, Stack, Text } from '@mantine/core';
-import { useTheme } from '../../../contexts/ThemeContext';
+import { useTheme } from '../../../providers/Theme/ThemeContext';
 import { storageService } from '../../../services/storage';
 
 const SettingsSidebar: React.FC = () => {

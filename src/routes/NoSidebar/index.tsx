@@ -1,6 +1,6 @@
 import React from 'react';
 import RouteLayout from '../../components/Layout/RouteLayout';
-import NoSidebarPage from '../../components/Pages/NoSidebarPage';
+import NoSidebarPage from './NoSidebarPage';
 
 const NoSidebarRoute: React.FC = () => {
   return (

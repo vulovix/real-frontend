@@ -1,7 +1,7 @@
 import React from 'react';
 import RouteLayout from '../../components/Layout/RouteLayout';
-import SettingsPage from '../../components/Pages/SettingsPage';
 import { SettingsSidebar } from '../../components/UI/Sidebars';
+import SettingsPage from './SettingsPage';
 
 const SettingsRoute: React.FC = () => {
   return (

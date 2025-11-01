@@ -1,7 +1,7 @@
 import React from 'react';
 import RouteLayout from '../../components/Layout/RouteLayout';
-import HomePage from '../../components/Pages/HomePage';
 import { AppOverviewSidebar } from '../../components/UI/Sidebars';
+import HomePage from './HomePage';
 
 const HomeRoute: React.FC = () => {
   return (
