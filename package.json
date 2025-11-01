@@ -22,9 +22,14 @@
   "dependencies": {
     "@mantine/core": "8.3.6",
     "@mantine/hooks": "8.3.6",
+    "@reduxjs/toolkit": "^2.9.2",
+    "@tabler/icons-react": "^3.35.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.9.4"
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.9.4",
+    "redux-saga": "^1.4.2",
+    "sass": "^1.93.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
@@ -39,6 +44,7 @@
     "@types/node": "^24.7.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
+    "@types/redux-saga": "^0.10.5",
     "@vitejs/plugin-react": "^5.0.4",
     "eslint": "^9.37.0",
     "eslint-config-mantine": "^4.0.3",

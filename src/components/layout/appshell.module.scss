@@ -1,0 +1,21 @@
+.mainContentWrapper {
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+}
+
+.sidebarWrapper {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .mainContentWrapper {
+    flex-direction: column;
+  }
+
+  .sidebarWrapper {
+    width: 100%;
+  }
+}
