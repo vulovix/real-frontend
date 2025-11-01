@@ -1,11 +1,11 @@
 import React, { ReactNode, useState } from 'react';
-import styles from './appshell.module.scss';
+import styles from './AppShell.module.scss';
 import { IconMenu2, IconX } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import { Anchor, AppShell, Button, Container, Group, Paper, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import Header from '../UI/Header';
-import MobileNavigation from '../UI/Header/MobileNavigation';
+import Header from '../../UI/Header';
+import MobileNavigation from '../../UI/Header/MobileNavigation';
 
 interface SubRoute {
   name: string;

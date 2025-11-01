@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import AppShellLayout from './appshell';
+import AppShellLayout from './AppShell';
 
 interface SubRoute {
   name: string;

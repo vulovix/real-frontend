@@ -1,6 +1,6 @@
 import React from 'react';
-import HomePage from '../../components/Pages/HomePage';
 import RouteLayout from '../../components/Layout/RouteLayout';
+import HomePage from '../../components/Pages/HomePage';
 import { AppOverviewSidebar } from '../../components/UI/Sidebars';
 
 const HomeRoute: React.FC = () => {
