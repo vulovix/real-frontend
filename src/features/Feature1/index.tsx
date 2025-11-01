@@ -2,20 +2,20 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Button, Card, Group, Loader, Stack, Text, Title } from '@mantine/core';
 import { AppDispatch, RootState } from '../../store';
-import { clearData, Feature1State, fetchDataStart } from './slice';
+import { clearTodos, Feature1State, fetchTodosStart } from './slice';
 
 const Feature1Page: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data, loading, error } = useSelector(
+  const { todos, loading, error } = useSelector(
     (state: RootState) => state.feature1
   ) as Feature1State;
 
   const handleFetchData = () => {
-    dispatch(fetchDataStart());
+    dispatch(fetchTodosStart());
   };
 
   const handleClearData = () => {
-    dispatch(clearData());
+    dispatch(clearTodos());
   };
 
   return (
@@ -46,17 +46,29 @@ const Feature1Page: React.FC = () => {
         </Alert>
       )}
 
-      {data.length > 0 && (
+      {todos.length > 0 && (
         <Card>
           <Text fw={500} mb="xs">
-            Fetched Data:
+            Todos from API:
           </Text>
           <Stack gap="xs">
-            {data.map((item: string, index: number) => (
-              <Text key={index} size="sm">
-                • {item}
-              </Text>
+            {todos.slice(0, 10).map((todo) => (
+              <Card key={todo.id} withBorder p="xs">
+                <Group justify="space-between">
+                  <Text size="sm" style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                    {todo.title}
+                  </Text>
+                  <Text size="xs" c={todo.completed ? 'green' : 'orange'}>
+                    {todo.completed ? 'Done' : 'Pending'}
+                  </Text>
+                </Group>
+              </Card>
             ))}
+            {todos.length > 10 && (
+              <Text size="xs" c="dimmed">
+                Showing first 10 of {todos.length} todos...
+              </Text>
+            )}
           </Stack>
         </Card>
       )}
@@ -64,7 +76,7 @@ const Feature1Page: React.FC = () => {
       <Card>
         <Text size="sm" c="dimmed">
           This page demonstrates Redux-Saga for handling asynchronous operations. Click "Fetch Data
-          via Saga" to trigger a saga that simulates an API call.
+          via Saga" to load real todos from JSONPlaceholder API.
         </Text>
       </Card>
     </Stack>

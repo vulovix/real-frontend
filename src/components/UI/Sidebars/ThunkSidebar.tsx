@@ -5,7 +5,7 @@ import { Feature2State } from '../../../features/Feature2/slice';
 import { RootState } from '../../../store';
 
 const ThunkSidebar: React.FC = () => {
-  const { data, loading, error } = useSelector(
+  const { posts, loading, error } = useSelector(
     (state: RootState) => state.feature2
   ) as Feature2State;
 
@@ -32,7 +32,7 @@ const ThunkSidebar: React.FC = () => {
               <Badge color="red" size="xs">
                 Error
               </Badge>
-            ) : data.length > 0 ? (
+            ) : posts.length > 0 ? (
               <Badge color="green" size="xs">
                 Success
               </Badge>
@@ -44,10 +44,10 @@ const ThunkSidebar: React.FC = () => {
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Text size="xs" c="green.7">
-              Items:
+              Posts:
             </Text>
             <Text size="xs" c="green.8" fw={500}>
-              {data.length}
+              {posts.length}
             </Text>
           </div>
           {error && (

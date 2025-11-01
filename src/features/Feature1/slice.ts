@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TodoItem } from './api';
 
 export interface Feature1State {
-  data: string[];
+  todos: TodoItem[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: Feature1State = {
-  data: [],
+  todos: [],
   loading: false,
   error: null,
 };
@@ -16,24 +17,39 @@ export const feature1Slice = createSlice({
   name: 'feature1',
   initialState,
   reducers: {
-    fetchDataStart: (state) => {
+    fetchTodosStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    fetchDataSuccess: (state, action: PayloadAction<string[]>) => {
+    fetchTodosSuccess: (state, action: PayloadAction<TodoItem[]>) => {
       state.loading = false;
-      state.data = action.payload;
+      state.todos = action.payload;
     },
-    fetchDataFailure: (state, action: PayloadAction<string>) => {
+    fetchTodosFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
     },
-    clearData: (state) => {
-      state.data = [];
+    addTodo: (state, action: PayloadAction<TodoItem>) => {
+      state.todos.unshift(action.payload);
+    },
+    toggleTodo: (state, action: PayloadAction<number>) => {
+      const todo = state.todos.find((t) => t.id === action.payload);
+      if (todo) {
+        todo.completed = !todo.completed;
+      }
+    },
+    clearTodos: (state) => {
+      state.todos = [];
       state.error = null;
     },
   },
 });
 
-export const { fetchDataStart, fetchDataSuccess, fetchDataFailure, clearData } =
-  feature1Slice.actions;
+export const {
+  fetchTodosStart,
+  fetchTodosSuccess,
+  fetchTodosFailure,
+  addTodo,
+  toggleTodo,
+  clearTodos,
+} = feature1Slice.actions;

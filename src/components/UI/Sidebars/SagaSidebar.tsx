@@ -5,7 +5,7 @@ import { Feature1State } from '../../../features/Feature1/slice';
 import { RootState } from '../../../store';
 
 const SagaSidebar: React.FC = () => {
-  const { data, loading, error } = useSelector(
+  const { todos, loading, error } = useSelector(
     (state: RootState) => state.feature1
   ) as Feature1State;
 
@@ -32,7 +32,7 @@ const SagaSidebar: React.FC = () => {
               <Badge color="red" size="xs">
                 Error
               </Badge>
-            ) : data.length > 0 ? (
+            ) : todos.length > 0 ? (
               <Badge color="green" size="xs">
                 Success
               </Badge>
@@ -44,10 +44,10 @@ const SagaSidebar: React.FC = () => {
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Text size="xs" c="blue.7">
-              Items:
+              Todos:
             </Text>
             <Text size="xs" c="blue.8" fw={500}>
-              {data.length}
+              {todos.length}
             </Text>
           </div>
           {error && (

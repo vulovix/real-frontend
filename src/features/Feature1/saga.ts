@@ -1,26 +1,31 @@
-import { call, delay, put, takeEvery } from 'redux-saga/effects';
-import { fetchDataFailure, fetchDataStart, fetchDataSuccess } from './slice';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { call, put, takeEvery } from 'redux-saga/effects';
+import { feature1Api, TodoItem } from './api';
+import { addTodo, fetchTodosFailure, fetchTodosStart, fetchTodosSuccess } from './slice';
 
-// Mock API call simulation
-function* mockApiCall(): Generator<unknown, string[], unknown> {
-  yield delay(1500); // Simulate network delay
-
-  // Simulate random success/failure
-  if (Math.random() > 0.2) {
-    return ['Saga Item 1', 'Saga Item 2', 'Saga Item 3', 'Fetched via Redux-Saga'];
+// Fetch todos saga
+function* fetchTodosSaga(): Generator<unknown, void, unknown> {
+  try {
+    const todos = yield call(feature1Api.fetchTodos);
+    yield put(fetchTodosSuccess(todos as TodoItem[]));
+  } catch (error) {
+    yield put(fetchTodosFailure((error as Error).message));
   }
-  throw new Error('Failed to fetch data from API');
 }
 
-function* fetchDataSaga(): Generator<unknown, void, unknown> {
+// Create todo saga
+function* createTodoSaga(
+  action: PayloadAction<Omit<TodoItem, 'id'>>
+): Generator<unknown, void, unknown> {
   try {
-    const data = yield call(mockApiCall);
-    yield put(fetchDataSuccess(data as string[]));
+    const newTodo = yield call(feature1Api.createTodo, action.payload);
+    yield put(addTodo(newTodo as TodoItem));
   } catch (error) {
-    yield put(fetchDataFailure((error as Error).message));
+    yield put(fetchTodosFailure(`Failed to create todo: ${(error as Error).message}`));
   }
 }
 
 export function* feature1Saga(): Generator<unknown, void, unknown> {
-  yield takeEvery(fetchDataStart.type, fetchDataSaga);
+  yield takeEvery(fetchTodosStart.type, fetchTodosSaga);
+  yield takeEvery('feature1/createTodo', createTodoSaga);
 }
