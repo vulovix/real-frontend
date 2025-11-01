@@ -201,9 +201,7 @@ class HttpClient {
 }
 
 // Create and export a default instance
-const httpClient = new HttpClient(
-  process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001/api'
-);
+const httpClient = new HttpClient(import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api');
 
 export default httpClient;
 

@@ -55,7 +55,10 @@ const Feature1Page: React.FC = () => {
             {todos.slice(0, 10).map((todo) => (
               <Card key={todo.id} withBorder p="xs">
                 <Group justify="space-between">
-                  <Text size="sm" style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                  <Text
+                    size="sm"
+                    style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
+                  >
                     {todo.title}
                   </Text>
                   <Text size="xs" c={todo.completed ? 'green' : 'orange'}>

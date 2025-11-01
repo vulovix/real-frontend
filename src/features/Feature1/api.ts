@@ -1,8 +1,8 @@
 import { makeGetRequest, makePostRequest } from '../../services';
 
 // Configuration
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://jsonplaceholder.typicode.com';
-const BACKUP_API_URL = process.env.REACT_APP_BACKUP_API_BASE_URL || 'https://quotable.io';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://jsonplaceholder.typicode.com';
+const BACKUP_API_URL = import.meta.env.VITE_BACKUP_API_BASE_URL || 'https://quotable.io';
 
 // Types for API responses
 export interface TodoItem {

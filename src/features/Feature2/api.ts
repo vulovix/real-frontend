@@ -1,7 +1,7 @@
 import { makeGetRequest, makePostRequest, makePutRequest } from '../../services';
 
 // Configuration
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://jsonplaceholder.typicode.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://jsonplaceholder.typicode.com';
 
 // Types for API responses
 export interface Post {
@@ -51,9 +51,7 @@ export const feature2Api = {
 
   // Fetch comments for a post
   fetchComments: async (postId: number): Promise<Comment[]> => {
-    return makeGetRequest<Comment[]>(
-      `${API_BASE_URL}/posts/${postId}/comments`
-    );
+    return makeGetRequest<Comment[]>(`${API_BASE_URL}/posts/${postId}/comments`);
   },
 
   // Fetch albums (alternative endpoint)
