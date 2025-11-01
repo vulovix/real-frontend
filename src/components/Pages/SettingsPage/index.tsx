@@ -13,8 +13,8 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { useTheme } from '../../contexts/ThemeContext';
-import { storageService } from '../../services/storage';
+import { useTheme } from '../../../contexts/ThemeContext';
+import { storageService } from '../../../services/storage';
 
 const SettingsPage: React.FC = () => {
   const { theme, setTheme, colorScheme, toggleColorScheme } = useTheme();

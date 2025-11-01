@@ -1,6 +1,6 @@
 import React from 'react';
-import RouteLayout from '../../components/layout/RouteLayout';
-import { SagaSidebar } from '../../components/sidebars';
+import RouteLayout from '../../components/Layout/RouteLayout';
+import { SagaSidebar } from '../../components/UI/Sidebars';
 import Feature1Page from '../../features/feature-1';
 
 const SagaRoute: React.FC = () => {

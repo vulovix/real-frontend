@@ -1,6 +1,6 @@
 import React from 'react';
-import RouteLayout from '../../components/layout/RouteLayout';
-import { ThunkSidebar } from '../../components/sidebars';
+import RouteLayout from '../../components/Layout/RouteLayout';
+import { ThunkSidebar } from '../../components/UI/Sidebars';
 import Feature2Page from '../../features/feature-2';
 
 const ThunkRoute: React.FC = () => {

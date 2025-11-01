@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge, Card, Stack, Text } from '@mantine/core';
-import { useTheme } from '../../contexts/ThemeContext';
-import { storageService } from '../../services/storage';
+import { useTheme } from '../../../contexts/ThemeContext';
+import { storageService } from '../../../services/storage';
 
 const SettingsSidebar: React.FC = () => {
   const { theme } = useTheme();

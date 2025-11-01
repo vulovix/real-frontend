@@ -4,8 +4,8 @@ import { IconMenu2, IconX } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import { Anchor, AppShell, Button, Container, Group, Paper, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import Header from '../header';
-import MobileNavigation from '../header/MobileNavigation';
+import Header from '../UI/Header';
+import MobileNavigation from '../UI/Header/MobileNavigation';
 
 interface SubRoute {
   name: string;
