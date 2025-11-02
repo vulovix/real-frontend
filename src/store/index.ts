@@ -9,6 +9,8 @@ import createSagaMiddleware from 'redux-saga';
 import authReducer from '../features/Auth/slice';
 // Import state types
 import type { AuthState } from '../features/Auth/types';
+import editorReducer from '../features/Editor/slice';
+import type { EditorState } from '../features/Editor/types';
 import feature1Reducer, { type Feature1State } from '../features/Feature1/slice';
 import feature2Reducer, { type Feature2State } from '../features/Feature2/slice';
 import newsReducer from '../features/News/slice';
@@ -44,6 +46,7 @@ if (process.env.NODE_ENV === 'development') {
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    editor: editorReducer,
     feature1: feature1Reducer,
     feature2: feature2Reducer,
     userManagement: userManagementReducer,
@@ -76,6 +79,7 @@ sagaMiddleware.run(rootSaga);
 // Export types for TypeScript
 export interface RootState {
   auth: AuthState;
+  editor: EditorState;
   feature1: Feature1State;
   feature2: Feature2State;
   userManagement: UserManagementState;

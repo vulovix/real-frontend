@@ -238,6 +238,7 @@ export interface UserNewsArticle {
   publishedAt?: string; // When article was published (optional)
   isPublished: boolean;
   readingTime: number; // Estimated reading time in minutes
+  tags: string[]; // Article tags
 }
 
 // User article state management

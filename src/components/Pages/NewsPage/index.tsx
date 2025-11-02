@@ -5,11 +5,16 @@
 
 import React, { useEffect, useState } from 'react';
 import { IconBug, IconDatabase, IconPlus, IconTrash } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import { Badge, Button, Card, Group, Modal, Stack, Text, Title } from '@mantine/core';
+import { createTab } from '../../../features/Editor/slice';
 import { NewsArticleList } from '../../../features/News/components';
 import { useNewsSeeder } from '../../../hooks/useNewsSeeder';
+import { useAppDispatch } from '../../../store/hooks';
 
 export function NewsPage() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { isSeeding, isClearing, seedStatus, seedArticles, clearArticles, checkSeedStatus } =
     useNewsSeeder();
   const [showSeedModal, setShowSeedModal] = useState(false);
@@ -20,14 +25,15 @@ export function NewsPage() {
   }, [checkSeedStatus]);
 
   const handleCreateArticle = () => {
-    // TODO: This will be implemented when the create article form is ready
-    // For now, do nothing - this will open a modal or navigate to a form
+    // Create a new tab in the editor and navigate there
+    dispatch(createTab({ type: 'create', title: 'New Article' }));
+    navigate('/editor');
   };
 
   const handleEditArticle = (articleId: string) => {
-    // TODO: This will be implemented when the edit article form is ready
-    // For now, do nothing - this will open an edit modal or navigate to edit form
-    void articleId; // Avoid unused parameter warning
+    // Create an edit tab in the editor and navigate there
+    dispatch(createTab({ type: 'edit', articleId, title: 'Edit Article' }));
+    navigate('/editor');
   };
 
   const handleDeleteArticle = (articleId: string) => {
@@ -79,13 +85,11 @@ export function NewsPage() {
       // eslint-disable-next-line no-console
       console.log(`Found ${publishedArticles.length} published articles:`, publishedArticles);
 
-      alert(
-        `Debug complete! Found ${allArticles.length} total articles, ${publishedArticles.length} published. Check console for details.`
-      );
+      // Debug complete - results are in console
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Debug test failed:', error);
-      alert(`Debug failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      // Debug failed - error logged to console
     }
   };
 

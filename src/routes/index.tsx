@@ -9,6 +9,7 @@ import { AuthInitializer } from '../components/AuthInitializer';
 import { OnlyPublicRoute } from '../components/Guards/OnlyPublicRoute';
 import { ProtectedRoute } from '../components/Guards/ProtectedRoute';
 import { DashboardRoute } from './Dashboard';
+import { EditorRoute } from './Editor';
 // All routes - each in its own folder
 import { HomeRoute } from './Home';
 import { LoginRoute } from './Login';
@@ -63,6 +64,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <NewsRoute />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'editor',
+        element: (
+          <ProtectedRoute>
+            <EditorRoute />
           </ProtectedRoute>
         ),
       },

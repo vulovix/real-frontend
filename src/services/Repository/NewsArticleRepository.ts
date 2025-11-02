@@ -27,6 +27,21 @@ export class NewsArticleRepository extends BaseRepository<UserNewsArticle> {
   }
 
   /**
+   * Find drafts (unpublished articles) by author ID
+   */
+  async findDraftsByAuthorId(authorId: string): Promise<UserNewsArticle[]> {
+    try {
+      // Use the safer approach: get all articles and filter in memory
+      const allArticles = await this.findAll();
+      return allArticles
+        .filter((article) => article.authorId === authorId && !article.isPublished)
+        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+    } catch (error) {
+      throw this.handleError('findDraftsByAuthorId', error);
+    }
+  }
+
+  /**
    * Find published articles only
    */
   async findPublishedArticles(): Promise<UserNewsArticle[]> {

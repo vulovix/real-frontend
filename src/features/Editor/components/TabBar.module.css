@@ -1,0 +1,81 @@
+/* Tab Bar Styles */
+.tab {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-right: 1px solid var(--mantine-color-gray-3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--mantine-color-gray-0);
+  min-width: 140px;
+  max-width: 200px;
+  position: relative;
+  user-select: none;
+}
+
+.tab:hover {
+  background: var(--mantine-color-gray-1);
+}
+
+.tab:first-child {
+  border-left: none;
+}
+
+.tabActive {
+  background: var(--mantine-color-blue-0) !important;
+  border-bottom: 2px solid var(--mantine-color-blue-6);
+}
+
+.tabTitle {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dragHandle {
+  opacity: 0.5;
+  cursor: grab;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.tab:hover .dragHandle {
+  opacity: 0.8;
+}
+
+.closeButton {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tab:hover .closeButton {
+  opacity: 1;
+}
+
+.closeButton:hover {
+  background: var(--mantine-color-red-1) !important;
+  color: var(--mantine-color-red-6) !important;
+}
+
+/* Dark theme support */
+[data-mantine-color-scheme='dark'] .tab {
+  background: var(--mantine-color-dark-7);
+  border-color: var(--mantine-color-dark-4);
+}
+
+[data-mantine-color-scheme='dark'] .tab:hover {
+  background: var(--mantine-color-dark-6);
+}
+
+[data-mantine-color-scheme='dark'] .tabActive {
+  background: var(--mantine-color-dark-6) !important;
+  border-bottom-color: var(--mantine-color-blue-4);
+}
+
+[data-mantine-color-scheme='dark'] .closeButton:hover {
+  background: var(--mantine-color-red-9) !important;
+  color: var(--mantine-color-red-4) !important;
+}

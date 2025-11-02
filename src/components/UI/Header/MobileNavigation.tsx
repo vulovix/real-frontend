@@ -57,6 +57,20 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ onLinkClick }) => {
         </Anchor>
       )}
 
+      {/* Editor link - only show when authenticated */}
+      {isAuthenticated && (
+        <Anchor
+          component={Link}
+          to="/editor"
+          fw={location.pathname === '/editor' ? 700 : 400}
+          c={location.pathname === '/editor' ? 'blue' : 'dark'}
+          underline="never"
+          onClick={onLinkClick}
+        >
+          Editor
+        </Anchor>
+      )}
+
       {/* Auth links - show when not authenticated */}
       {!isAuthenticated && (
         <>
