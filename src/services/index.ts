@@ -1,22 +1,26 @@
 // HTTP Client and API utilities
-export { default as httpClient, HttpClient } from './HttpClient';
+export { httpClient, HttpClient } from './Http';
 export {
-  default as api,
+  api,
   makeGetRequest,
   makePostRequest,
   makePutRequest,
   makePatchRequest,
   makeDeleteRequest,
-  makeUploadRequest,
   setAuthToken,
   removeAuthToken,
   setBaseURL,
   setDefaultHeaders,
-} from './api';
+} from './Api';
 
 // Storage utilities
-export { storageService as storage } from './storage';
-export { authStorage, AuthStorage } from './Storage/index';
+export { storageService as storage, authStorage, AuthStorage } from './Storage';
+
+// Database utilities
+export * from './Database';
+
+// Repository utilities
+export * from './Repository';
 
 // Types
-export type { ApiResponse, ApiError, RequestConfig } from './HttpClient';
+export type { HttpResponse, HttpRequestConfig, HttpConfig, HttpError, HttpErrorCode } from './Http';

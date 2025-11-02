@@ -1,6 +1,7 @@
 /**
  * Storage service for persisting data in localStorage
  */
+
 class StorageService {
   private prefix = 'redux-app-';
 

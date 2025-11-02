@@ -14,7 +14,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useTheme } from '../../../providers/Theme/ThemeContext';
-import { storageService } from '../../../services/storage';
+import { storageService } from '../../../services/Storage';
 
 const SettingsPage: React.FC = () => {
   const { theme, setTheme, colorScheme, toggleColorScheme } = useTheme();
