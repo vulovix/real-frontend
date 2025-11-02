@@ -4,6 +4,7 @@
  */
 
 import { databaseConnection } from '../Database';
+import { NewsArticleRepository } from './NewsArticleRepository';
 import { NewsCacheRepository } from './NewsCacheRepository';
 import { SessionRepository } from './SessionRepository';
 import { UserPreferencesRepository } from './UserPreferencesRepository';
@@ -14,6 +15,7 @@ export class RepositoryFactory {
   private static sessionRepository: SessionRepository | null = null;
   private static newsCacheRepository: NewsCacheRepository | null = null;
   private static userPreferencesRepository: UserPreferencesRepository | null = null;
+  private static newsArticleRepository: NewsArticleRepository | null = null;
 
   static async getUserRepository(): Promise<UserRepository> {
     if (!this.userRepository) {
@@ -45,5 +47,13 @@ export class RepositoryFactory {
       this.userPreferencesRepository = new UserPreferencesRepository();
     }
     return this.userPreferencesRepository;
+  }
+
+  static async getNewsArticleRepository(): Promise<NewsArticleRepository> {
+    if (!this.newsArticleRepository) {
+      await databaseConnection.initialize();
+      this.newsArticleRepository = new NewsArticleRepository();
+    }
+    return this.newsArticleRepository;
   }
 }

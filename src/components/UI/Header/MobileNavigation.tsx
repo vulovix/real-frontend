@@ -43,6 +43,20 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ onLinkClick }) => {
         </Anchor>
       )}
 
+      {/* News link - only show when authenticated */}
+      {isAuthenticated && (
+        <Anchor
+          component={Link}
+          to="/news"
+          fw={location.pathname === '/news' ? 700 : 400}
+          c={location.pathname === '/news' ? 'blue' : 'dark'}
+          underline="never"
+          onClick={onLinkClick}
+        >
+          News
+        </Anchor>
+      )}
+
       {/* Auth links - show when not authenticated */}
       {!isAuthenticated && (
         <>

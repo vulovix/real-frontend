@@ -6,16 +6,13 @@
 import { all, fork } from 'redux-saga/effects';
 // Import feature sagas
 import { authSaga } from '../features/Auth/saga';
+import { newsSaga } from '../features/News/saga';
 import { userManagementSaga } from '../features/Users/saga';
 
 /**
  * Root saga that combines all feature sagas
- * Note: News feature uses Redux Thunk (createAsyncThunk), so no saga needed
+ * News feature uses Redux Thunk (createAsyncThunk) with saga for side effects
  */
 export function* rootSaga() {
-  yield all([
-    fork(authSaga),
-    fork(userManagementSaga),
-    // Note: News uses Redux Thunk (createAsyncThunk), no saga needed
-  ]);
+  yield all([fork(authSaga), fork(newsSaga), fork(userManagementSaga)]);
 }

@@ -5,12 +5,13 @@
 
 export const DATABASE_CONFIG = {
   NAME: 'NewsAppDatabase',
-  VERSION: 1,
+  VERSION: 2, // Incremented for new store
   STORES: {
     USERS: 'users',
     SESSIONS: 'sessions',
     NEWS_CACHE: 'news_cache',
     USER_PREFERENCES: 'user_preferences',
+    USER_NEWS_ARTICLES: 'user_news_articles',
   },
 } as const;
 
@@ -39,5 +40,15 @@ export const STORE_SCHEMAS = {
   [DATABASE_CONFIG.STORES.USER_PREFERENCES]: {
     keyPath: 'id',
     indexes: [],
+  },
+  [DATABASE_CONFIG.STORES.USER_NEWS_ARTICLES]: {
+    keyPath: 'id',
+    indexes: [
+      { name: 'authorId', keyPath: 'authorId', unique: false },
+      { name: 'category', keyPath: 'category', unique: false },
+      { name: 'isPublished', keyPath: 'isPublished', unique: false },
+      { name: 'createdAt', keyPath: 'createdAt', unique: false },
+      { name: 'updatedAt', keyPath: 'updatedAt', unique: false },
+    ],
   },
 } as const;

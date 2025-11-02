@@ -144,6 +144,7 @@ export interface NewsPagination {
 }
 
 export interface NewsState {
+  // External API articles
   articles: NewsArticle[];
   sources: NewsSource[];
   preferences: NewsPreferences | null;
@@ -152,6 +153,14 @@ export interface NewsState {
   loading: NewsLoadingState;
   error: NewsError | null;
   lastUpdated: string | null;
+
+  // User-created articles
+  userNews: UserNewsState;
+
+  // Sidebar activity data
+  sidebarData: NewsSidebarData | null;
+  sidebarLoading: boolean;
+  sidebarError: NewsError | null;
 }
 
 // User interaction types
@@ -212,6 +221,90 @@ export interface NewsFilter {
   hasImage: boolean | null;
   readStatus: 'all' | 'read' | 'unread';
   bookmarkStatus: 'all' | 'bookmarked' | 'not-bookmarked';
+}
+
+// User-created news articles (separate from external API articles)
+export interface UserNewsArticle {
+  id: string;
+  title: string;
+  intro: string; // Short introduction/summary
+  description: string; // Rich text content (HTML)
+  imageUrl?: string; // Optional image
+  authorId: string; // User who created the article
+  authorName: string; // Cached author name for display
+  category: NewsCategory;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt?: string; // When article was published (optional)
+  isPublished: boolean;
+  readingTime: number; // Estimated reading time in minutes
+}
+
+// User article state management
+export interface UserNewsState {
+  userArticles: UserNewsArticle[];
+  loading: {
+    fetchingUserArticles: boolean;
+    creatingArticle: boolean;
+    updatingArticle: boolean;
+    deletingArticle: boolean;
+  };
+  error: NewsError | null;
+  filters: {
+    showOnlyMyArticles: boolean;
+    category?: NewsCategory;
+    sortBy: 'createdAt' | 'updatedAt' | 'title';
+    sortOrder: 'asc' | 'desc';
+    viewMode: 'grid' | 'list';
+  };
+  lastUpdated: string | null;
+}
+
+// User article operations
+export interface CreateUserArticleRequest {
+  title: string;
+  intro: string;
+  description: string;
+  imageUrl?: string;
+  category: NewsCategory;
+  isPublished?: boolean;
+}
+
+export interface UpdateUserArticleRequest {
+  id: string;
+  updates: Partial<Omit<CreateUserArticleRequest, 'authorId'>>;
+}
+
+export interface DeleteUserArticleRequest {
+  id: string;
+}
+
+export interface FetchUserArticlesRequest {
+  authorId?: string; // If provided, fetch only articles by this author
+  category?: NewsCategory;
+  isPublished?: boolean;
+}
+
+// Sidebar activity types
+export interface NewsActivityStats {
+  totalArticles: number;
+  totalAuthors: number;
+  articlesThisWeek: number;
+  articlesThisMonth: number;
+}
+
+export interface TopAuthor {
+  authorId: string;
+  authorName: string;
+  articleCount: number;
+  latestArticleDate: string;
+}
+
+export interface NewsSidebarData {
+  recentArticles: UserNewsArticle[];
+  recentlyUpdatedArticles: UserNewsArticle[];
+  topAuthors: TopAuthor[];
+  activityStats: NewsActivityStats;
 }
 
 // Thunk action types (for type safety with createAsyncThunk)

@@ -12,6 +12,7 @@ import { DashboardRoute } from './Dashboard';
 // All routes - each in its own folder
 import { HomeRoute } from './Home';
 import { LoginRoute } from './Login';
+import { NewsRoute } from './News';
 import { NotFoundRoute } from './NotFound';
 import { SignupRoute } from './Signup';
 
@@ -54,6 +55,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <DashboardRoute />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'news',
+        element: (
+          <ProtectedRoute>
+            <NewsRoute />
           </ProtectedRoute>
         ),
       },

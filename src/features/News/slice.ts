@@ -7,8 +7,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { newsService, NewsServiceError } from './api';
 import {
   BookmarkArticleRequest,
+  CreateUserArticleRequest,
+  DeleteUserArticleRequest,
   FetchArticlesThunkArg,
   FetchSourcesThunkArg,
+  FetchUserArticlesRequest,
   MarkAsReadRequest,
   NewsAnalytics,
   NewsApiResponse,
@@ -18,11 +21,15 @@ import {
   NewsErrorCode,
   NewsPreferences,
   NewsSearchParams,
+  NewsSidebarData,
   NewsSortBy,
   NewsSourcesResponse,
   NewsState,
   SearchArticlesThunkArg,
   UpdatePreferencesRequest,
+  UpdateUserArticleRequest,
+  UserNewsArticle,
+  UserNewsState,
 } from './types';
 
 // Initial state
@@ -51,6 +58,30 @@ const initialState: NewsState = {
   },
   error: null,
   lastUpdated: null,
+
+  // User-created articles state
+  userNews: {
+    userArticles: [],
+    loading: {
+      fetchingUserArticles: false,
+      creatingArticle: false,
+      updatingArticle: false,
+      deletingArticle: false,
+    },
+    error: null,
+    filters: {
+      showOnlyMyArticles: false,
+      sortBy: 'updatedAt',
+      sortOrder: 'desc',
+      viewMode: 'grid',
+    },
+    lastUpdated: null,
+  },
+
+  // Sidebar data
+  sidebarData: null,
+  sidebarLoading: false,
+  sidebarError: null,
 };
 
 // Async thunk for fetching articles
@@ -270,6 +301,180 @@ export const getUserAnalytics = createAsyncThunk<NewsAnalytics, string, { reject
   }
 );
 
+// User Articles Async Thunks
+export const fetchUserArticles = createAsyncThunk<
+  UserNewsArticle[],
+  FetchUserArticlesRequest,
+  { rejectValue: NewsError }
+>('news/fetchUserArticles', async (request, { rejectWithValue }) => {
+  try {
+    // eslint-disable-next-line no-console
+    console.log('fetchUserArticles thunk called with request:', request);
+
+    const { RepositoryFactory } = await import('../../services/Repository');
+    const newsRepo = await RepositoryFactory.getNewsArticleRepository();
+
+    // eslint-disable-next-line no-console
+    console.log('Repository initialized successfully');
+
+    let result: UserNewsArticle[];
+
+    if (request.authorId) {
+      // eslint-disable-next-line no-console
+      console.log('Fetching articles by authorId:', request.authorId);
+      result = await newsRepo.findByAuthorId(request.authorId);
+    } else if (request.category) {
+      // eslint-disable-next-line no-console
+      console.log('Fetching articles by category:', request.category);
+      result = await newsRepo.findByCategory(request.category);
+    } else if (request.isPublished !== undefined) {
+      // eslint-disable-next-line no-console
+      console.log('Fetching articles by published status:', request.isPublished);
+      result = request.isPublished
+        ? await newsRepo.findPublishedArticles()
+        : await newsRepo.findAll();
+    } else {
+      // eslint-disable-next-line no-console
+      console.log('Fetching all published articles (default)');
+      result = await newsRepo.findPublishedArticles();
+    }
+
+    // eslint-disable-next-line no-console
+    console.log('fetchUserArticles thunk completed successfully:', result);
+    return result;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('fetchUserArticles thunk failed:', error);
+
+    const errorDetails = {
+      code: NewsErrorCode.UNKNOWN_ERROR,
+      message: 'Failed to fetch user articles',
+      timestamp: new Date().toISOString(),
+      details: {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+      },
+    };
+
+    // eslint-disable-next-line no-console
+    console.error('Rejecting with error details:', errorDetails);
+    return rejectWithValue(errorDetails);
+  }
+});
+
+export const createUserArticle = createAsyncThunk<
+  UserNewsArticle,
+  CreateUserArticleRequest & { authorId: string; authorName: string },
+  { rejectValue: NewsError }
+>('news/createUserArticle', async (request, { rejectWithValue }) => {
+  try {
+    const { RepositoryFactory } = await import('../../services/Repository');
+    const newsRepo = await RepositoryFactory.getNewsArticleRepository();
+
+    const now = new Date().toISOString();
+    const newArticle: UserNewsArticle = {
+      id: crypto.randomUUID(),
+      title: request.title,
+      intro: request.intro,
+      description: request.description,
+      imageUrl: request.imageUrl,
+      authorId: request.authorId,
+      authorName: request.authorName,
+      category: request.category,
+      createdAt: now,
+      updatedAt: now,
+      publishedAt: request.isPublished ? now : undefined,
+      isPublished: request.isPublished ?? false,
+      readingTime: newsRepo.calculateReadingTime(request.description),
+    };
+
+    await newsRepo.create(newArticle);
+    return newArticle;
+  } catch (error) {
+    return rejectWithValue({
+      code: NewsErrorCode.UNKNOWN_ERROR,
+      message: 'Failed to create article',
+      timestamp: new Date().toISOString(),
+      details: { error: error instanceof Error ? error.message : 'Unknown error' },
+    });
+  }
+});
+
+export const updateUserArticle = createAsyncThunk<
+  UserNewsArticle,
+  UpdateUserArticleRequest,
+  { rejectValue: NewsError }
+>('news/updateUserArticle', async (request, { rejectWithValue }) => {
+  try {
+    const { RepositoryFactory } = await import('../../services/Repository');
+    const newsRepo = await RepositoryFactory.getNewsArticleRepository();
+
+    const updatedArticle = await newsRepo.update(request.id, request.updates);
+    return updatedArticle;
+  } catch (error) {
+    return rejectWithValue({
+      code: NewsErrorCode.UNKNOWN_ERROR,
+      message: 'Failed to update article',
+      timestamp: new Date().toISOString(),
+      details: { error: error instanceof Error ? error.message : 'Unknown error' },
+    });
+  }
+});
+
+export const deleteUserArticle = createAsyncThunk<
+  string,
+  DeleteUserArticleRequest,
+  { rejectValue: NewsError }
+>('news/deleteUserArticle', async (request, { rejectWithValue }) => {
+  try {
+    const { RepositoryFactory } = await import('../../services/Repository');
+    const newsRepo = await RepositoryFactory.getNewsArticleRepository();
+
+    await newsRepo.delete(request.id);
+    return request.id;
+  } catch (error) {
+    return rejectWithValue({
+      code: NewsErrorCode.UNKNOWN_ERROR,
+      message: 'Failed to delete article',
+      timestamp: new Date().toISOString(),
+      details: { error: error instanceof Error ? error.message : 'Unknown error' },
+    });
+  }
+});
+
+// Sidebar Activity Thunk
+export const fetchNewsSidebarData = createAsyncThunk<
+  NewsSidebarData,
+  void,
+  { rejectValue: NewsError }
+>('news/fetchSidebarData', async (_, { rejectWithValue }) => {
+  try {
+    const { RepositoryFactory } = await import('../../services/Repository');
+    const newsRepo = await RepositoryFactory.getNewsArticleRepository();
+
+    const [recentArticles, recentlyUpdatedArticles, topAuthors, activityStats] = await Promise.all([
+      newsRepo.getRecentArticles(5),
+      newsRepo.getRecentlyUpdatedArticles(5),
+      newsRepo.getTopAuthors(5),
+      newsRepo.getActivityStats(),
+    ]);
+
+    return {
+      recentArticles,
+      recentlyUpdatedArticles,
+      topAuthors,
+      activityStats,
+    };
+  } catch (error) {
+    return rejectWithValue({
+      code: NewsErrorCode.UNKNOWN_ERROR,
+      message: 'Failed to fetch sidebar data',
+      timestamp: new Date().toISOString(),
+      details: { error: error instanceof Error ? error.message : 'Unknown error' },
+    });
+  }
+});
+
 // News slice
 const newsSlice = createSlice({
   name: 'news',
@@ -298,6 +503,15 @@ const newsSlice = createSlice({
       if (index !== -1) {
         state.articles[index] = { ...state.articles[index], ...action.payload };
       }
+    },
+
+    // User News reducers
+    updateUserNewsFilters: (state, action: PayloadAction<Partial<UserNewsState['filters']>>) => {
+      state.userNews.filters = { ...state.userNews.filters, ...action.payload };
+    },
+
+    clearUserNewsError: (state) => {
+      state.userNews.error = null;
     },
 
     // Reset entire state
@@ -495,12 +709,127 @@ const newsSlice = createSlice({
           timestamp: new Date().toISOString(),
         };
       });
+
+    // User Articles
+    builder
+      .addCase(fetchUserArticles.pending, (state) => {
+        state.userNews.loading.fetchingUserArticles = true;
+        state.userNews.error = null;
+      })
+      .addCase(fetchUserArticles.fulfilled, (state, action) => {
+        state.userNews.loading.fetchingUserArticles = false;
+        state.userNews.userArticles = action.payload;
+        state.userNews.lastUpdated = new Date().toISOString();
+        state.userNews.error = null;
+      })
+      .addCase(fetchUserArticles.rejected, (state, action) => {
+        state.userNews.loading.fetchingUserArticles = false;
+        state.userNews.error = action.payload || {
+          code: NewsErrorCode.UNKNOWN_ERROR,
+          message: 'Failed to fetch user articles',
+          timestamp: new Date().toISOString(),
+        };
+      });
+
+    builder
+      .addCase(createUserArticle.pending, (state) => {
+        state.userNews.loading.creatingArticle = true;
+        state.userNews.error = null;
+      })
+      .addCase(createUserArticle.fulfilled, (state, action) => {
+        state.userNews.loading.creatingArticle = false;
+        state.userNews.userArticles.unshift(action.payload);
+        state.userNews.lastUpdated = new Date().toISOString();
+        state.userNews.error = null;
+      })
+      .addCase(createUserArticle.rejected, (state, action) => {
+        state.userNews.loading.creatingArticle = false;
+        state.userNews.error = action.payload || {
+          code: NewsErrorCode.UNKNOWN_ERROR,
+          message: 'Failed to create article',
+          timestamp: new Date().toISOString(),
+        };
+      });
+
+    builder
+      .addCase(updateUserArticle.pending, (state) => {
+        state.userNews.loading.updatingArticle = true;
+        state.userNews.error = null;
+      })
+      .addCase(updateUserArticle.fulfilled, (state, action) => {
+        state.userNews.loading.updatingArticle = false;
+        const index = state.userNews.userArticles.findIndex(
+          (article) => article.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.userNews.userArticles[index] = action.payload;
+        }
+        state.userNews.lastUpdated = new Date().toISOString();
+        state.userNews.error = null;
+      })
+      .addCase(updateUserArticle.rejected, (state, action) => {
+        state.userNews.loading.updatingArticle = false;
+        state.userNews.error = action.payload || {
+          code: NewsErrorCode.UNKNOWN_ERROR,
+          message: 'Failed to update article',
+          timestamp: new Date().toISOString(),
+        };
+      });
+
+    builder
+      .addCase(deleteUserArticle.pending, (state) => {
+        state.userNews.loading.deletingArticle = true;
+        state.userNews.error = null;
+      })
+      .addCase(deleteUserArticle.fulfilled, (state, action) => {
+        state.userNews.loading.deletingArticle = false;
+        state.userNews.userArticles = state.userNews.userArticles.filter(
+          (article) => article.id !== action.payload
+        );
+        state.userNews.lastUpdated = new Date().toISOString();
+        state.userNews.error = null;
+      })
+      .addCase(deleteUserArticle.rejected, (state, action) => {
+        state.userNews.loading.deletingArticle = false;
+        state.userNews.error = action.payload || {
+          code: NewsErrorCode.UNKNOWN_ERROR,
+          message: 'Failed to delete article',
+          timestamp: new Date().toISOString(),
+        };
+      });
+
+    // Sidebar Data
+    builder
+      .addCase(fetchNewsSidebarData.pending, (state) => {
+        state.sidebarLoading = true;
+        state.sidebarError = null;
+      })
+      .addCase(fetchNewsSidebarData.fulfilled, (state, action) => {
+        state.sidebarLoading = false;
+        state.sidebarData = action.payload;
+        state.sidebarError = null;
+      })
+      .addCase(fetchNewsSidebarData.rejected, (state, action) => {
+        state.sidebarLoading = false;
+        state.sidebarError = action.payload || {
+          code: NewsErrorCode.UNKNOWN_ERROR,
+          message: 'Failed to fetch sidebar data',
+          timestamp: new Date().toISOString(),
+        };
+      });
   },
 });
 
 // Export actions
-export const { updateSearchParams, resetSearch, clearError, updateLocalArticle, resetNews } =
-  newsSlice.actions;
+export const {
+  updateSearchParams,
+  resetSearch,
+  clearError,
+  updateLocalArticle,
+  updateUserNewsFilters,
+  clearUserNewsError,
+  resetNews,
+} = newsSlice.actions;
 
 // Selectors
 export const selectNews = (state: { news: NewsState }) => state.news;
@@ -543,6 +872,63 @@ export const selectUnreadArticles = (state: { news: NewsState }) =>
 
 export const selectArticlesByCategory = (category: NewsCategory) => (state: { news: NewsState }) =>
   state.news.articles.filter((article) => article.category === category);
+
+// User Articles Selectors
+export const selectUserNews = (state: { news: NewsState }) => state.news.userNews;
+export const selectUserArticles = (state: { news: NewsState }) => state.news.userNews.userArticles;
+export const selectUserNewsLoading = (state: { news: NewsState }) => state.news.userNews.loading;
+export const selectUserNewsError = (state: { news: NewsState }) => state.news.userNews.error;
+export const selectUserNewsFilters = (state: { news: NewsState }) => state.news.userNews.filters;
+
+export const selectMyArticles = (authorId: string) => (state: { news: NewsState }) =>
+  state.news.userNews.userArticles.filter((article) => article.authorId === authorId);
+
+export const selectFilteredUserArticles = (authorId?: string) => (state: { news: NewsState }) => {
+  const { userArticles, filters } = state.news.userNews;
+  let filtered = userArticles;
+
+  // Filter by author if "My Articles" is selected
+  if (filters.showOnlyMyArticles && authorId) {
+    filtered = filtered.filter((article) => article.authorId === authorId);
+  }
+
+  // Filter by category
+  if (filters.category) {
+    filtered = filtered.filter((article) => article.category === filters.category);
+  }
+
+  // Sort articles (create a copy first since Redux state is immutable)
+  filtered = [...filtered].sort((a, b) => {
+    const aValue = a[filters.sortBy];
+    const bValue = b[filters.sortBy];
+
+    if (filters.sortOrder === 'asc') {
+      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+    }
+
+    return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+  });
+
+  return filtered;
+};
+
+export const selectUserArticleById = (articleId: string) => (state: { news: NewsState }) =>
+  state.news.userNews.userArticles.find((article) => article.id === articleId);
+
+export const selectIsUserNewsLoading = (state: { news: NewsState }) => {
+  const loading = state.news.userNews.loading;
+  return (
+    loading.fetchingUserArticles ||
+    loading.creatingArticle ||
+    loading.updatingArticle ||
+    loading.deletingArticle
+  );
+};
+
+// Sidebar Selectors
+export const selectNewsSidebarData = (state: { news: NewsState }) => state.news.sidebarData;
+export const selectNewsSidebarLoading = (state: { news: NewsState }) => state.news.sidebarLoading;
+export const selectNewsSidebarError = (state: { news: NewsState }) => state.news.sidebarError;
 
 // Export reducer
 export default newsSlice.reducer;

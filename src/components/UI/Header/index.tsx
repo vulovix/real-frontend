@@ -56,6 +56,19 @@ const Header: React.FC<HeaderProps> = ({ opened, toggle }) => {
             </Anchor>
           )}
 
+          {/* News link - only show when authenticated */}
+          {isAuthenticated && (
+            <Anchor
+              component={Link}
+              to="/news"
+              fw={location.pathname === '/news' ? 700 : 400}
+              c={location.pathname === '/news' ? 'blue' : 'dark'}
+              underline="never"
+            >
+              News
+            </Anchor>
+          )}
+
           {/* Auth links - show when not authenticated */}
           {!isAuthenticated && (
             <>

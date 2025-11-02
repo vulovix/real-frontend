@@ -104,8 +104,8 @@ export function Dashboard() {
               <Text ta="center" c="dimmed" size="sm">
                 Create, edit, and manage news articles
               </Text>
-              <Button variant="light" fullWidth disabled>
-                Coming Soon
+              <Button variant="light" fullWidth component="a" href="/news">
+                View News
               </Button>
             </Stack>
           </Card>
