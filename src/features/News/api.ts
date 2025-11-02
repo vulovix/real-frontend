@@ -3,7 +3,7 @@
  * Professional implementation for news fetching with caching and error handling
  */
 
-import { RepositoryFactory } from '../../services/repositories';
+import { RepositoryFactory } from '../../services/Repository/RepositoryFactory';
 import {
   NewsAnalytics,
   NewsApiResponse,

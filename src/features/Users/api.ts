@@ -3,7 +3,7 @@
  * Professional implementation for admin user management
  */
 
-import { RepositoryFactory } from '../../services/repositories';
+import { RepositoryFactory } from '../../services/Repository/RepositoryFactory';
 import { StoredUser, User, UserRole } from '../Auth/types';
 import {
   DeleteUserRequest,

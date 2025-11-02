@@ -6,7 +6,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { call, delay, fork, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { authStorage } from '../../services';
-import { AuthenticationError, authService } from './api';
+import { AuthenticationError, authService } from './services';
 import {
   initializeSessionFailure,
   initializeSessionRequest,
